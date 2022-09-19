@@ -16,12 +16,16 @@ public class ArduinoConnection {
 	 */
 	private final SerialPort arduino;
 
+	private int numLEDs;
+
 	/**
 	 * @param port         - The usb port on the RoboRIO that the arduino is
 	 *                     connected to
 	 * @param bufferLength - The number of LEDs in your LED strip
 	 */
 	public ArduinoConnection(SerialPort.Port port, int bufferLength) {
+		this.numLEDs = bufferLength;
+
 		SerialPort arduino = null;
 
 		// Assures that even if the connection cant be established, that the robot can
@@ -44,15 +48,32 @@ public class ArduinoConnection {
 		this.arduino = arduino;
 	}
 
-	void writeBuffer(AddressableLEDBuffer ledBuffer) {
+	/**
+	 * Sets the LED Strip pixels to the contents of this buffer
+	 * 
+	 * @throws IllegalArgumentException if the length of the buffer does not match
+	 *                                  the number of LEDs configured
+	 */
+	public void writeBuffer(AddressableLEDBuffer ledBuffer) {
+		if (ledBuffer.getLength() != this.numLEDs) {
+			throw new IllegalArgumentException("ledBuffer length must match pre-configured strip length");
+		}
+
 		this.sendPacket(new RawLedBufferPacket(ledBuffer));
 	}
 
-	void clear() {
+	/**
+	 * Clears the entire LED strip setting all the pixels to off
+	 */
+	public void clear() {
 		this.sendPacket(new ClearPacket());
 	}
 
-	void setSolidColor(Color color) {
+	/**
+	 * Sets the entire strip to a single solid color
+	 * @param color The color to set to
+	 */
+	public void setSolidColor(Color color) {
 		this.sendPacket(new SolidColorPacket(color));
 	}
 
@@ -61,7 +82,7 @@ public class ArduinoConnection {
 	 * 
 	 * @param packet The packet to serialize and send
 	 */
-	void sendPacket(ProtoPacket packet) {
+	public void sendPacket(ProtoPacket packet) {
 		// If there is no arduino connected, just bail
 		if (arduino == null)
 			return;

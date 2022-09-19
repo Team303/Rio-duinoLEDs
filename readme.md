@@ -14,3 +14,7 @@ This library is still a work in progress but I have some really big hopes.
 * Make integration with existing command based subsystems seamless
 * Make it easy to define custom high speed animations and packet extensions
 * Automatically handle error cases such as connection loss without crashing the main robot code
+
+## Docs
+
+Head over to the [docs](/docs) directory to find some example code and explanations 

@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+    id "edu.wpi.first.GradleRIO" version "2022.3.1"
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+description = "Team 303 NeoPixel Library"
+
+// Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+// Also defines JUnit 4.
+dependencies {
+    implementation wpi.java.deps.wpilib()
+    implementation wpi.java.vendor.java()
+}
+
+jar {
+    archiveBaseName = 'team303-rioduino'
+    archiveVersion =  '0.1.0'
+
+    into 'resources', {
+        from 'resources'
+    }
+}
